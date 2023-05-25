@@ -28,7 +28,7 @@ Matrix4x4 Subtract(Matrix4x4& m1, Matrix4x4& m2) {
 	return result;
 }
 // 乗算
-Matrix4x4 Multiply(Matrix4x4& matrix, float& other) {
+Matrix4x4 Multiply(const Matrix4x4& matrix, const float& other) {
 	Matrix4x4 result{};
 	for (int y = 0; y < 4; y++) {
 		for (int x = 0; x < 4; x++) {
@@ -37,7 +37,7 @@ Matrix4x4 Multiply(Matrix4x4& matrix, float& other) {
 	}
 	return result;
 }
-Matrix4x4 Multiply(Matrix4x4& m1, Matrix4x4& m2) {
+Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
 	Matrix4x4 result{};
 	for (int y = 0; y < 4; y++) {
 		for (int x = 0; x < 4; x++) {
