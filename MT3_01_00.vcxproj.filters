@@ -107,5 +107,6 @@
     <ClInclude Include="C:\KamataEngine\DirectXGame\2d\ImGuiManager.h" />
     <ClInclude Include="Matrix4x4Func.h" />
     <ClInclude Include="Vector3Func.h" />
+    <ClInclude Include="Line.h" />
   </ItemGroup>
 </Project>

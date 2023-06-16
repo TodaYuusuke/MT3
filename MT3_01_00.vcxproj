@@ -135,6 +135,7 @@
     <ClInclude Include="C:\KamataEngine\DirectXGame\input\Input.h" />
     <ClInclude Include="C:\KamataEngine\DirectXGame\scene\GameScene.h" />
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h" />
+    <ClInclude Include="Line.h" />
     <ClInclude Include="Matrix4x4Func.h" />
     <ClInclude Include="Vector3Func.h" />
   </ItemGroup>
