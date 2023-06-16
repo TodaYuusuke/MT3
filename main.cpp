@@ -25,7 +25,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vector3 cameraPosition{ 0.0f,1.9f,-6.49f };
 	// カメラ角度
 	Vector3 cameraRotate{ 0.26f,0.0f,0.0f };
-
+	
 	// 線分
 	Segment segment{ {-2.0f,-1.0f,0.0f},{3.0f,2.0f,2.0f} };
 	// 点
