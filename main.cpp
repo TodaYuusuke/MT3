@@ -3,10 +3,10 @@
 #include "Matrix4x4Func.h"
 #include "Vector2.h"
 
-#include "Line.h"
+#include "./Shapes/Line.h"
+#include "./Shapes/Sphere.h"
 
-
-const char kWindowTitle[] = "MT3_02_00_確認課題_LE2B_21_トダ_ユウスケ";
+const char kWindowTitle[] = "MT3_02_01_確認課題_LE2B_21_トダ_ユウスケ";
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -26,18 +26,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// カメラ角度
 	Vector3 cameraRotate{ 0.26f,0.0f,0.0f };
 	
-	// 線分
-	Segment segment{ {-2.0f,-1.0f,0.0f},{3.0f,2.0f,2.0f} };
-	// 点
-	Vector3 point{ -1.5f,0.6f,0.6f };
-	Sphere pointSphere{ point, 0.01f }; // 1cmの球
+	Sphere sphere[2] = {
+		{ {0.0f,0.0f,0.0f}, 0.5f },
+		{ {1.0f,0.0f,-1.0f}, 0.2f },
+	};
 
-	// 正射影ベクトル
-	Vector3 project = Project(Subtract(point, segment.origin), segment.diff);
-	// 最近接点
-	Vector3 closestPoint = ClosestPoint(point, segment);
-	Sphere closestPointSphere{ closestPoint, 0.01f }; // 1cmの球
-
+	unsigned int color = WHITE;
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -59,8 +53,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Matrix4x4 viewProjectionMatrix = Multiply(viewMatrix, projectionMatrix);;
 		Matrix4x4 viewPortMatrix = MakeViewportMatrix(0, 0, float(kWindowWidth), float(kWindowHeight), 0.0f, 1.0f);
 
-		Vector3 start = TransformCoord(TransformCoord(segment.origin, viewProjectionMatrix), viewPortMatrix);
-		Vector3 end = TransformCoord(TransformCoord(Add(segment.origin, segment.diff), viewProjectionMatrix), viewPortMatrix);
+		if (IsCollision(sphere[0], sphere[1])) { color = RED; }
+		else { color = WHITE; }
 
 		///
 		/// ↑更新処理ここまで
@@ -73,16 +67,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// グリッドを描画
 		DrawGrid(viewProjectionMatrix, viewPortMatrix);
 
-		DrawSphere(pointSphere, viewProjectionMatrix, viewPortMatrix, RED);
-		DrawSphere(closestPointSphere, viewProjectionMatrix, viewPortMatrix, BLACK);
-
-		Novice::DrawLine(int(start.x), int(start.y), int(end.x), int(end.y), WHITE);
+		DrawSphere(sphere[0], viewProjectionMatrix, viewPortMatrix, color);
+		DrawSphere(sphere[1], viewProjectionMatrix, viewPortMatrix, WHITE);
 
 		ImGui::Begin("Window");
-		ImGui::InputFloat3("Point", &point.x, "%.3f", ImGuiInputTextFlags_ReadOnly);
-		ImGui::InputFloat3("Segment origin", &segment.origin.x, "%.3f", ImGuiInputTextFlags_ReadOnly);
-		ImGui::InputFloat3("Segment diff", &segment.diff.x, "%.3f", ImGuiInputTextFlags_ReadOnly);
-		ImGui::InputFloat3("Project", &project.x, "%.3f", ImGuiInputTextFlags_ReadOnly);
+		ImGui::DragFloat3("Sphere[0].center", &sphere[0].center.x, 0.01f, -2.0f, 2.0f, "%.3f");
+		ImGui::DragFloat("Sphere[0].radius", &sphere[0].radius, 0.01f, 0.01f, 2.0f, "%.3f");
+		ImGui::DragFloat3("Sphere[1].center", &sphere[1].center.x, 0.01f, -2.0f, 2.0f, "%.3f");
+		ImGui::DragFloat("Sphere[1].radius", &sphere[1].radius, 0.01f, 0.01f, 2.0f, "%.3f");
 		ImGui::End();
 
 		///

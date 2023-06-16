@@ -26,7 +26,6 @@
     <ClInclude Include="C:\KamataEngine\DirectXGame\math\Vector2.h" />
     <ClInclude Include="C:\KamataEngine\DirectXGame\math\Vector3.h" />
     <ClInclude Include="C:\KamataEngine\DirectXGame\math\Vector4.h" />
-    <ClInclude Include="Line.h" />
     <ClInclude Include="Matrix4x4Func.h" />
     <ClInclude Include="Vector3Func.h" />
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h">
@@ -93,6 +92,12 @@
       <Filter>KamataEngine\Include</Filter>
     </ClInclude>
     <ClInclude Include="C:\KamataEngine\DirectXGame\2d\ImGuiManager.h" />
+    <ClInclude Include="Shapes\Line.h">
+      <Filter>Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Shapes\Sphere.h">
+      <Filter>Shapes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="KamataEngine">
@@ -106,6 +111,9 @@
     </Filter>
     <Filter Include="KamataEngine\Source">
       <UniqueIdentifier>{72aa3063-b848-4c85-bc53-7bcdc68fc4e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shapes">
+      <UniqueIdentifier>{13a672e9-dee2-4d96-a5c5-a5f34b4703c0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
