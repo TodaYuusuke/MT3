@@ -11,12 +11,6 @@ struct Sphere {
 	float radius;	//!< 半径
 };
 
-// 球同士の当たり判定をチェック
-bool IsCollision(const Sphere& s1, const Sphere& s2) {
-	float distance = Length(Subtract(s1.center, s2.center));
-	return distance <= s1.radius + s2.radius;
-}
-
 // 球を描画
 void DrawSphere(const Sphere& sphere, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color) {
 	const uint32_t kSubdivision = 12;									// 分割数
