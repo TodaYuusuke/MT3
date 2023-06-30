@@ -141,6 +141,7 @@
     <ClInclude Include="Shapes\Plane.h" />
     <ClInclude Include="Shapes\ShapeCollision.h" />
     <ClInclude Include="Shapes\Sphere.h" />
+    <ClInclude Include="Triangle.h" />
     <ClInclude Include="Vector2Func.h" />
     <ClInclude Include="Vector3Func.h" />
   </ItemGroup>

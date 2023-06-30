@@ -32,8 +32,8 @@ static Vector3 ClosestPoint(const Vector3& point, const Segment& segment) {
 // 線の描画
 void DrawLine(const Line& line, const Matrix4x4& viewProjectionMatrix, const Matrix4x4& viewportMatrix, uint32_t color) {
 	Vector3 points[2];
-	points[1] = Add(line.origin, Multiply(10.0f, line.diff));
-	points[0] = { -points[1].x,-points[1].y,-points[1].z };
+	points[0] = Add(line.origin, Multiply(-2.0f, line.diff));
+	points[1] = Add(line.origin, Multiply(2.0f, line.diff));
 
 	points[0] = TransformCoord(TransformCoord(points[0], viewProjectionMatrix), viewportMatrix);
 	points[1] = TransformCoord(TransformCoord(points[1], viewProjectionMatrix), viewportMatrix);

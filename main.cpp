@@ -19,23 +19,23 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Novice::Initialize(kWindowTitle, kWindowWidth, kWindowHeight);
 
 	// キー入力結果を受け取る箱
-	char keys[256] = {0};
-	char preKeys[256] = {0};
+	char keys[256] = { 0 };
+	char preKeys[256] = { 0 };
 
 	// マウス座標
-	Vector2 mousePosition = { 0.0f,0.0f };
+	Vector2 mousePosition{ 0.0f,0.0f };
 	// 前フレームのマウス座標
-	Vector2 preMousePosition = { 0.0f,0.0f };
+	Vector2 preMousePosition{ 0.0f,0.0f };
 
 	// カメラ座標
 	Vector3 cameraPosition{ 0.0f,1.9f,-6.49f };
 	// カメラ角度
 	Vector3 cameraRotate{ 0.26f,0.0f,0.0f };
-	
-	// 平面
-	Plane plane = { {0.0f,1.0f,0.0f}, 1.0f };
+
+	// 三角形
+	Triangle triangle{ .vertices{{ -1.0f, 0.0f, 0.0f },{ 0.0f, 1.0f, 0.0f },{ 1.0f, 0.0f, 0.0f }} };
 	// 線分
-	Segment segment = { {-0.450f,0.330f,0.0f }, {1.0f,0.5f,0.0f} };
+	Segment segment{ .origin{-0.450f,0.420f,-1.0f }, .diff{0.0f,0.5f,2.0f} };
 	// 色
 	unsigned int color = WHITE;
 
@@ -89,7 +89,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Matrix4x4 viewProjectionMatrix = Multiply(viewMatrix, projectionMatrix);;
 		Matrix4x4 viewPortMatrix = MakeViewportMatrix(0, 0, float(kWindowWidth), float(kWindowHeight), 0.0f, 1.0f);
 
-		if (IsCollision(segment, plane)) { color = RED; }
+		if (IsCollision(triangle, segment)) { color = RED; }
 		else { color = WHITE; }
 
 		///
@@ -104,16 +104,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		DrawGrid(viewProjectionMatrix, viewPortMatrix);
 
 		DrawLine(segment, viewProjectionMatrix, viewPortMatrix, color);
-		DrawPlane(plane, viewProjectionMatrix, viewPortMatrix, WHITE);
+		DrawTriangle(triangle, viewProjectionMatrix, viewPortMatrix, WHITE);
 
 		ImGui::Begin("Window");
-		ImGui::DragFloat3("Plane.normal", &plane.normal.x, 0.01f, {}, {}, "%.3f");
-		ImGui::DragFloat("Plane.distance", &plane.distance, 0.01f, {}, {}, "%.3f");
-		ImGui::DragFloat3("Segment.origin", &segment.origin.x, 0.01f, {}, {}, "%.3f");
-		ImGui::DragFloat3("Segment.diff", &segment.diff.x, 0.01f, {}, {}, "%.3f");
+		ImGui::DragFloat3("Triangle.vertices[0]", &triangle.vertices[0].x, 0.01f, {}, {}, "%.3f");
+		ImGui::DragFloat3("Triangle.vertices[1]", &triangle.vertices[1].x, 0.01f, {}, {}, "%.3f");
+		ImGui::DragFloat3("Triangle.vertices[2]", &triangle.vertices[2].x, 0.01f, {}, {}, "%.3f");
+		ImGui::DragFloat3("segment.origin", &segment.origin.x, 0.01f, {}, {}, "%.3f");
+		ImGui::DragFloat3("segment.diff", &segment.diff.x, 0.01f, {}, {}, "%.3f");
 		ImGui::End();
-
-		plane.normal = Normalize(plane.normal);
 
 		///
 		/// ↑描画処理ここまで

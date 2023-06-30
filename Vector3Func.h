@@ -37,7 +37,7 @@ Vector3 Subtract(const Vector3& v1, const Vector3& v2) {
 /// <param name="scalar">... スカラー</param>
 /// <param name="v">... ベクトル</param>
 /// <returns></returns>
-Vector3 Multiply(float scalar, const Vector3& v) {
+Vector3 Multiply(const float& scalar, const Vector3& v) {
 	Vector3 result;
 	result.x = v.x * scalar;
 	result.y = v.y * scalar;

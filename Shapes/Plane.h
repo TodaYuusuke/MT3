@@ -1,6 +1,7 @@
 #pragma once
 #include "Vector3Func.h"
 #include "Matrix4x4Func.h"
+#include "Triangle.h"
 
 struct Plane {
 	Vector3 normal;	//!< 法線
@@ -13,6 +14,21 @@ Vector3 Perpendicular(const Vector3& vector) {
 		return { -vector.y, vector.x, 0.0f };
 	}
 	return { 0.0f,-vector.z, vector.y };
+}
+
+// 三角形から平面を求める
+Plane TriangleToPlane(const Triangle& triangle) {
+	Plane result{};
+
+	Vector3 a = triangle.vertices[0];
+	Vector3 ab = Subtract(triangle.vertices[0], triangle.vertices[1]);
+	Vector3 bc = Subtract(triangle.vertices[1], triangle.vertices[2]);
+	// 法線を算出
+	result.normal = Normalize(Cross(ab, bc));
+	// 距離を算出
+	result.distance = result.normal.x * a.x + result.normal.y * a.y + result.normal.z * a.z;
+
+	return result;
 }
 
 // 平面を描画
