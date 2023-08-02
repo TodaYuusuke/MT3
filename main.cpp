@@ -7,7 +7,7 @@
 #include "./Shapes/Sphere.h"
 #include "./Shapes/ShapeCollision.h"
 
-const char kWindowTitle[] = "MT3_02_02_確認課題_LE2B_21_トダ_ユウスケ";
+const char kWindowTitle[] = "MT3_02_04_確認課題_LE2B_21_トダ_ユウスケ";
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -62,19 +62,28 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		preMousePosition = mousePosition;
 
+		// カメラの移動法線ベクトル
+		Matrix4x4 rMatrix = MakeRotateXYZMatrix(cameraRotate);
+		Vector3 cameraMove = { 0.0f,0.0f,0.1f };
+		cameraMove = Multiply(rMatrix, cameraMove);
+
 		// 移動 // 
 		if (keys[DIK_W]) {
-			cameraPosition.z += 0.1f;
+			cameraPosition = Add(cameraPosition, cameraMove);
 		}
 		if (keys[DIK_S]) {
-			cameraPosition.z -= 0.1f;
+			cameraPosition = Subtract(cameraPosition, cameraMove);
+		}
+		cameraMove = { 0.0f,0.0f,0.1f };
+		cameraMove = Multiply(MakeRotateXYZMatrix({0.0f,1.57f,0.0f,}), cameraMove);
+		cameraMove = Multiply(rMatrix, cameraMove);
+		if (keys[DIK_D]) {
+			cameraPosition = Add(cameraPosition, cameraMove);
 		}
 		if (keys[DIK_A]) {
-			cameraPosition.x -= 0.1f;
+			cameraPosition = Subtract(cameraPosition, cameraMove);
 		}
-		if (keys[DIK_D]) {
-			cameraPosition.x += 0.1f;
-		}
+
 		if (keys[DIK_LCONTROL]) {
 			cameraPosition.y -= 0.1f;
 		}

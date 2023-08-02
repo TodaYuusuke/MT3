@@ -1,5 +1,6 @@
 #pragma once
 #include "Vector3.h"
+#include "Matrix4x4.h"
 #include <vector>
 #include <Novice.h>
 
@@ -42,6 +43,20 @@ Vector3 Multiply(const float& scalar, const Vector3& v) {
 	result.x = v.x * scalar;
 	result.y = v.y * scalar;
 	result.z = v.z * scalar;
+	return result;
+}
+
+/// <summary>
+/// 3次元ベクトルの行列倍
+/// </summary>
+/// <param name="matrix">... 行列/param>
+/// <param name="v">... ベクトル</param>
+/// <returns></returns>
+Vector3 Multiply(const Matrix4x4& matrix, const Vector3& v) {
+	Vector3 result{};
+	result.x = v.x * matrix.m[0][0] + v.y * matrix.m[1][0] + v.z * matrix.m[2][0] + matrix.m[3][0];
+	result.y = v.x * matrix.m[0][1] + v.y * matrix.m[1][1] + v.z * matrix.m[2][1] + matrix.m[3][1];
+	result.z = v.x * matrix.m[0][2] + v.y * matrix.m[1][2] + v.z * matrix.m[2][2] + matrix.m[3][2];
 	return result;
 }
 
