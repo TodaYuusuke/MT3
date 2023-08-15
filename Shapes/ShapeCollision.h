@@ -3,7 +3,7 @@
 #include "Plane.h"
 #include "Sphere.h"
 #include "Triangle.h"
-
+#include "AABB.h"
 
 // Sphere * Sphere
 bool IsCollision(const Sphere& s1, const Sphere& s2) {
@@ -126,3 +126,21 @@ bool IsCollision(const Segment& segment, const Triangle& triangle) {
 	return false;
 }
 bool IsCollision(const Triangle& t, const Segment& s) { return IsCollision(s, t); }
+
+// AABB * AABB
+bool IsCollision(const AABB& aabb1, const AABB& aabb2) {
+	// x軸方向で重なっていない
+	if (aabb1.min.x > aabb2.max.x || aabb1.max.x < aabb2.min.x) {
+		return false;
+	}
+	// y軸方向で重なっていない
+	if (aabb1.min.y > aabb2.max.y || aabb1.max.y < aabb2.min.y) {
+		return false;
+	}
+	// z軸方向で重なっていない
+	if (aabb1.min.z > aabb2.max.z || aabb1.max.z < aabb2.min.z) {
+		return false;
+	}
+	// すべての軸方向で重なっている
+	return true;
+}

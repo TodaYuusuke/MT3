@@ -32,10 +32,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	// カメラ角度
 	Vector3 cameraRotate{ 0.26f,0.0f,0.0f };
 
-	// 三角形
-	Triangle triangle{ .vertices{{ -1.0f, 0.0f, 0.0f },{ 0.0f, 1.0f, 0.0f },{ 1.0f, 0.0f, 0.0f }} };
-	// 線分
-	Segment segment{ .origin{-0.450f,0.420f,-1.0f }, .diff{0.0f,0.5f,2.0f} };
+	// AABB2つ
+	AABB aabb[2];
+	aabb[0] = {
+		.min{-0.5f,-0.5f,-0.5f},
+		.max{0.0f,0.0f,0.0f},
+	};
+	aabb[1] = {
+		.min{0.2f,0.2f,0.2f},
+		.max{1.0f,1.0f,1.0f},
+	};
+
 	// 色
 	unsigned int color = WHITE;
 
@@ -98,7 +105,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Matrix4x4 viewProjectionMatrix = Multiply(viewMatrix, projectionMatrix);;
 		Matrix4x4 viewPortMatrix = MakeViewportMatrix(0, 0, float(kWindowWidth), float(kWindowHeight), 0.0f, 1.0f);
 
-		if (IsCollision(triangle, segment)) { color = RED; }
+		if (IsCollision(aabb[0], aabb[1])) { color = RED; }
 		else { color = WHITE; }
 
 		///
@@ -112,16 +119,26 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// グリッドを描画
 		DrawGrid(viewProjectionMatrix, viewPortMatrix);
 
-		DrawLine(segment, viewProjectionMatrix, viewPortMatrix, color);
-		DrawTriangle(triangle, viewProjectionMatrix, viewPortMatrix, WHITE);
+		DrawAABB(aabb[0], viewProjectionMatrix, viewPortMatrix, color);
+		DrawAABB(aabb[1], viewProjectionMatrix, viewPortMatrix, color);
 
 		ImGui::Begin("Window");
-		ImGui::DragFloat3("Triangle.vertices[0]", &triangle.vertices[0].x, 0.01f, {}, {}, "%.3f");
-		ImGui::DragFloat3("Triangle.vertices[1]", &triangle.vertices[1].x, 0.01f, {}, {}, "%.3f");
-		ImGui::DragFloat3("Triangle.vertices[2]", &triangle.vertices[2].x, 0.01f, {}, {}, "%.3f");
-		ImGui::DragFloat3("segment.origin", &segment.origin.x, 0.01f, {}, {}, "%.3f");
-		ImGui::DragFloat3("segment.diff", &segment.diff.x, 0.01f, {}, {}, "%.3f");
+		ImGui::DragFloat3("aabb1.min", &aabb[0].min.x, 0.01f, {}, {}, "%.3f");
+		ImGui::DragFloat3("aabb1.max", &aabb[0].max.x, 0.01f, {}, {}, "%.3f");
+		ImGui::DragFloat3("aabb2.min", &aabb[1].min.x, 0.01f, {}, {}, "%.3f");
+		ImGui::DragFloat3("aabb2.max", &aabb[1].max.x, 0.01f, {}, {}, "%.3f");
 		ImGui::End();
+
+		AABB newAABB{};
+		for (int i = 0; i < 2; i++) {
+			newAABB.min.x = (std::min)(aabb[i].min.x, aabb[i].max.x);
+			newAABB.max.x = (std::max)(aabb[i].min.x, aabb[i].max.x);
+			newAABB.min.y = (std::min)(aabb[i].min.y, aabb[i].max.y);
+			newAABB.max.y = (std::max)(aabb[i].min.y, aabb[i].max.y);
+			newAABB.min.z = (std::min)(aabb[i].min.z, aabb[i].max.z);
+			newAABB.max.z = (std::max)(aabb[i].min.z, aabb[i].max.z);
+			aabb[i] = newAABB;
+		}
 
 		///
 		/// ↑描画処理ここまで

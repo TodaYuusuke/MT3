@@ -105,7 +105,10 @@
       <Filter>Shapes</Filter>
     </ClInclude>
     <ClInclude Include="Vector2Func.h" />
-    <ClInclude Include="Triangle.h">
+    <ClInclude Include="Shapes\AABB.h">
+      <Filter>Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Shapes\Triangle.h">
       <Filter>Shapes</Filter>
     </ClInclude>
   </ItemGroup>
