@@ -16,7 +16,23 @@ bool IsCollision(const Sphere& s, const Plane& p) {
 	return sqrtf(distance * distance) <= s.radius;
 }
 bool IsCollision(const Plane& p, const Sphere& s) { return IsCollision(s, p); }
+// Sphere * AABB
+bool IsCollision(const Sphere& s, const AABB& aabb) {
+	// 最近接点を求める
+	Vector3 closestPoint{};
+	closestPoint.x = std::clamp(s.center.x, aabb.min.x, aabb.max.x);
+	closestPoint.y = std::clamp(s.center.y, aabb.min.y, aabb.max.y);
+	closestPoint.z = std::clamp(s.center.z, aabb.min.z, aabb.max.z);
+	// 最近接点と球の中心にとの距離を求める
+	float distance = Length(Subtract(closestPoint, s.center));
+	// 距離が半径よりも小さければ衝突
+	if (distance <= s.radius) {
+		return true;
+	}
 
+	return false;
+}
+bool IsCollision(const AABB& aabb, const Sphere& s) { return IsCollision(s, aabb); }
 
 // Line * Plane
 bool IsCollision(const Line& l, const Plane& p) {
@@ -126,6 +142,7 @@ bool IsCollision(const Segment& segment, const Triangle& triangle) {
 	return false;
 }
 bool IsCollision(const Triangle& t, const Segment& s) { return IsCollision(s, t); }
+
 
 // AABB * AABB
 bool IsCollision(const AABB& aabb1, const AABB& aabb2) {

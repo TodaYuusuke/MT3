@@ -3,8 +3,6 @@
 #include "Matrix4x4Func.h"
 #include "Vector2Func.h"
 
-#include "./Shapes/Line.h"
-#include "./Shapes/Sphere.h"
 #include "./Shapes/ShapeCollision.h"
 
 const char kWindowTitle[] = "MT3_02_04_確認課題_LE2B_21_トダ_ユウスケ";
@@ -33,14 +31,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vector3 cameraRotate{ 0.26f,0.0f,0.0f };
 
 	// AABB2つ
-	AABB aabb[2];
-	aabb[0] = {
+	AABB aabb{
 		.min{-0.5f,-0.5f,-0.5f},
 		.max{0.0f,0.0f,0.0f},
 	};
-	aabb[1] = {
-		.min{0.2f,0.2f,0.2f},
-		.max{1.0f,1.0f,1.0f},
+	// 球
+	Sphere sphere{
+		{0.5f,0.5f,0.5f},
+		1.0f,
 	};
 
 	// 色
@@ -58,7 +56,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓更新処理ここから
 		///
-		
+
 		// カメラ操作
 
 		// 回転 //
@@ -82,7 +80,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			cameraPosition = Subtract(cameraPosition, cameraMove);
 		}
 		cameraMove = { 0.0f,0.0f,0.1f };
-		cameraMove = Multiply(MakeRotateXYZMatrix({0.0f,1.57f,0.0f,}), cameraMove);
+		cameraMove = Multiply(MakeRotateXYZMatrix({ 0.0f,1.57f,0.0f, }), cameraMove);
 		cameraMove = Multiply(rMatrix, cameraMove);
 		if (keys[DIK_D]) {
 			cameraPosition = Add(cameraPosition, cameraMove);
@@ -105,7 +103,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		Matrix4x4 viewProjectionMatrix = Multiply(viewMatrix, projectionMatrix);;
 		Matrix4x4 viewPortMatrix = MakeViewportMatrix(0, 0, float(kWindowWidth), float(kWindowHeight), 0.0f, 1.0f);
 
-		if (IsCollision(aabb[0], aabb[1])) { color = RED; }
+		if (IsCollision(aabb, sphere)) { color = RED; }
 		else { color = WHITE; }
 
 		///
@@ -115,30 +113,28 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓描画処理ここから
 		///
-		
+
 		// グリッドを描画
 		DrawGrid(viewProjectionMatrix, viewPortMatrix);
 
-		DrawAABB(aabb[0], viewProjectionMatrix, viewPortMatrix, color);
-		DrawAABB(aabb[1], viewProjectionMatrix, viewPortMatrix, color);
+		DrawAABB(aabb, viewProjectionMatrix, viewPortMatrix, color);
+		DrawSphere(sphere, viewProjectionMatrix, viewPortMatrix, color);
 
 		ImGui::Begin("Window");
-		ImGui::DragFloat3("aabb1.min", &aabb[0].min.x, 0.01f, {}, {}, "%.3f");
-		ImGui::DragFloat3("aabb1.max", &aabb[0].max.x, 0.01f, {}, {}, "%.3f");
-		ImGui::DragFloat3("aabb2.min", &aabb[1].min.x, 0.01f, {}, {}, "%.3f");
-		ImGui::DragFloat3("aabb2.max", &aabb[1].max.x, 0.01f, {}, {}, "%.3f");
+		ImGui::DragFloat3("aabb.min", &aabb.min.x, 0.01f, {}, {}, "%.3f");
+		ImGui::DragFloat3("aabb.max", &aabb.max.x, 0.01f, {}, {}, "%.3f");
+		ImGui::DragFloat3("sphere.center", &sphere.center.x, 0.01f, {}, {}, "%.3f");
+		ImGui::DragFloat("sphere.radius", &sphere.radius, 0.01f, {}, {}, "%.3f");
 		ImGui::End();
 
 		AABB newAABB{};
-		for (int i = 0; i < 2; i++) {
-			newAABB.min.x = (std::min)(aabb[i].min.x, aabb[i].max.x);
-			newAABB.max.x = (std::max)(aabb[i].min.x, aabb[i].max.x);
-			newAABB.min.y = (std::min)(aabb[i].min.y, aabb[i].max.y);
-			newAABB.max.y = (std::max)(aabb[i].min.y, aabb[i].max.y);
-			newAABB.min.z = (std::min)(aabb[i].min.z, aabb[i].max.z);
-			newAABB.max.z = (std::max)(aabb[i].min.z, aabb[i].max.z);
-			aabb[i] = newAABB;
-		}
+		newAABB.min.x = (std::min)(aabb.min.x, aabb.max.x);
+		newAABB.max.x = (std::max)(aabb.min.x, aabb.max.x);
+		newAABB.min.y = (std::min)(aabb.min.y, aabb.max.y);
+		newAABB.max.y = (std::max)(aabb.min.y, aabb.max.y);
+		newAABB.min.z = (std::min)(aabb.min.z, aabb.max.z);
+		newAABB.max.z = (std::max)(aabb.min.z, aabb.max.z);
+		aabb = newAABB;
 
 		///
 		/// ↑描画処理ここまで
